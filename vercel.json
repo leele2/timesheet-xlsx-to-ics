@@ -6,7 +6,7 @@
     }
   ],
   "functions": {
-    "shifts": {
+    "shifts/views.py": {
       "timeout": 30
     }
   }
