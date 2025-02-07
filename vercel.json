@@ -6,8 +6,8 @@
     }
   ],
   "functions": {
-    "shifts/views.py": {
-      "timeout": 30
+    "app/api/**/*": {
+      "maxDuration": 30
     }
   }
 }
