@@ -1,11 +1,11 @@
-from datetime import datetime
+import io
+import pytz
 from django.http import HttpResponse
 from django.middleware.csrf import get_token
-import io
+from datetime import datetime
 from .utils import read_xls, find_shifts
 from ics import Calendar, Event
 from datetime import timedelta
-import pytz
 
 local_time_zone = pytz.timezone("Australia/Sydney")
 
