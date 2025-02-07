@@ -4,5 +4,10 @@
       "src": "/(.*)",
       "dest": "api/wsgi.py"
     }
-  ]
+  ],
+  "functions": {
+    "shifts": {
+      "timeout": 30
+    }
+  }
 }
