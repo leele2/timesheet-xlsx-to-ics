@@ -1,10 +1,13 @@
-import io
+from datetime import datetime
 from django.http import HttpResponse
 from django.middleware.csrf import get_token
-from datetime import datetime, timedelta
+import io
 from .utils import read_xls, find_shifts
 from ics import Calendar, Event
-from django.utils import timezone
+from datetime import timedelta
+import pytz
+
+local_time_zone = pytz.timezone("Australia/Sydney")
 
 def upload_file(request):
     # If the form is submitted
@@ -12,36 +15,30 @@ def upload_file(request):
         uploaded_file = request.FILES['excel_file']
         
         # Read the file content into memory
-        file_content = uploaded_file.read()
-        file_stream = io.BytesIO(file_content)
+        file_content = uploaded_file.read()  # This reads the file content into memory
+        file_stream = io.BytesIO(file_content)  # Create an in-memory byte stream
 
         # Process the file
-        data_frames = read_xls(file_stream)
+        data_frames = read_xls(file_stream)  
         name_to_search = request.POST.get('name_to_search')
         shifts = find_shifts(data_frames, name_to_search)
 
-        # Create the calendar
+        # Create an ICS calendar file
         cal = Calendar()
-
-        # Pre-calculate the timezone (no need to localize on every shift)
-        local_time_zone = timezone.get_current_timezone()
-
         for shift in shifts:
             shift_date = datetime.strptime(shift["Date"], "%d/%m/%Y")
-            start_time = datetime.strptime(shift["Start Time"], "%H:%M").time()
-            start_dt = datetime.combine(shift_date, start_time)
-            localized_start = timezone.make_aware(start_dt, local_time_zone)
-
-            # Calculate the end time once, adjusting for the shift duration
+            start_dt = datetime.combine(shift_date, datetime.strptime(shift["Start Time"], "%H:%M").time())
+            naive_start = start_dt.replace(tzinfo=None)
+            localized_start = local_time_zone.localize(naive_start)
             end_dt = localized_start + timedelta(hours=shift["Duration"])
+            naive_end = end_dt.replace(tzinfo=None)
+            localized_end = local_time_zone.localize(naive_end)
 
-            # Create the event
             event = Event()
             event.name = "Work Shift"
             event.begin = localized_start
-            event.end = end_dt
+            event.end = localized_end
 
-            # Add event to calendar
             cal.events.add(event)
 
         # Generate the .ics file as a response
@@ -50,6 +47,8 @@ def upload_file(request):
         return response
 
     # If no file is uploaded, return an inline HTML response
+    
+    # Get CSRF token
     csrf_token = get_token(request)
 
     html = f'''
@@ -69,7 +68,7 @@ def upload_file(request):
                 Select the Excel file and type the name you would like to find the shifts for, then hit upload.
             </p>
             <p>
-                Please note this will only work with Excel .xlsx files and the format must be accepted.
+                Please note this will only work with Excel .xlsx files and the format must be accepted
             </p>
             <h2>Upload Your Excel File</h2>
             <form method="POST" enctype="multipart/form-data">
