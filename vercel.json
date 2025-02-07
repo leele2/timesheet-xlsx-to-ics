@@ -6,8 +6,8 @@
     }
   ],
   "functions": {
-    "api/**/*": {
-      "maxDuration": 30
+    "api/wsgi.py": {
+      "maxDuration": 60
     }
   }
 }
