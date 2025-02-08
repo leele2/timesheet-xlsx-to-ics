@@ -55,34 +55,82 @@ def upload_file(request):
     csrf_token = get_token(request)
 
     html = f'''
-    <html>
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Upload Excel File</title>
-        </head>
-        <body>
-            <h1>Welcome to the Shift Calendar</h1>
-            <p>
-                This website allows you to upload an Excel file containing your work shifts,
-                and it will generate an ICS calendar file that you can use in your preferred calendar application.
-            </p>
-            <p>
-                Select the Excel file and type the name you would like to find the shifts for, then hit upload.
-            </p>
-            <p>
-                Please note this will only work with Excel .xlsx files and the format must be accepted
-            </p>
-            <h2>Upload Your Excel File</h2>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
-                <label for="name_to_search">Name to Search:</label>
-                <input type="text" name="name_to_search" id="name_to_search" required>
-                <br><br>
-                <input type="file" name="excel_file" accept=".xlsx" required>
-                <button type="submit">Upload</button>
-            </form>
-        </body>
-    </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel File</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }}
+        .container {{
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }}
+        h1, h2 {{
+            color: #333;
+        }}
+        p {{
+            color: #555;
+        }}
+        input[type="text"], input[type="file"] {{
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }}
+        button {{
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }}
+        button:hover {{
+            background-color: #0056b3;
+        }}
+        a {{
+            color: #007BFF;
+            text-decoration: none;
+        }}
+        a:hover {{
+            text-decoration: underline;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shift Calendar</h1>
+        <p>Upload an Excel file containing your work shifts and generate an ICS calendar file.</p>
+        <p><a href="https://github.com/leele2/timesheet-xlsx-to-ics" target="_blank">Learn More</a></p>
+        <h2>Upload Your File</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
+            <label for="name_to_search">Name:</label>
+            <input type="text" name="name_to_search" id="name_to_search" required>
+            <input type="file" name="excel_file" accept=".xlsx" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
     '''
     return HttpResponse(html)
