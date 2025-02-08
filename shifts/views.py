@@ -22,15 +22,21 @@ def upload_file(request):
 
         # Create an ICS calendar file
         cal = Calendar()
+        local_time_zone = pytz.timezone("Australia/Sydney")
         for shift in shifts:
             shift_date = datetime.strptime(shift["Date"], "%d/%m/%Y")
-            start_dt = datetime.combine(shift_date, datetime.strptime(shift["Start Time"], "%H:%M").time())
-            naive_start = start_dt.replace(tzinfo=None)
-            localized_start = local_time_zone.localize(naive_start)
-            end_dt = localized_start + timedelta(hours=shift["Duration"])
-            naive_end = end_dt.replace(tzinfo=None)
-            localized_end = local_time_zone.localize(naive_end)
+            start_time = datetime.strptime(shift["Start Time"], "%H:%M").time()
+            
+            # Combine date and time
+            start_dt = datetime.combine(shift_date, start_time)
 
+            # Localize the start time
+            localized_start = local_time_zone.localize(start_dt)
+
+            # Calculate the end time using the duration
+            localized_end = localized_start + timedelta(hours=shift["Duration"])
+
+            # Create the event
             event = Event()
             event.name = "Work Shift"
             event.begin = localized_start
