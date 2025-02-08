@@ -1,4 +1,4 @@
-# Shift Calendar Uploader
+# Excel to ICS Converter [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://timesheet-xlsx-to-ics.vercel.app/)
 
 ## Overview
 This project provides a web-based tool for uploading an Excel file containing work shifts and converting it into an ICS calendar file. Users can then import the generated ICS file into their preferred calendar applications.
@@ -17,19 +17,6 @@ This project provides a web-based tool for uploading an Excel file containing wo
   - `ics` for calendar file generation
   - `pandas` (used in `read_xls` for Excel processing)
 
-## Folder Structure
-```
-project-root/
-│-- shifts/
-│   ├── views.py  # Handles file upload and ICS generation
-│   ├── utils.py  # Contains helper functions like reading Excel files
-│-- api/
-│   ├── wsgi.py   # WSGI entry point for deployment
-│-- vercel.json   # Deployment configuration for Vercel
-│-- requirements.txt  # Dependencies
-│-- README.md  # Project documentation
-```
-
 ## 📤 How to Upload Your File
 
 1. Open the application in your web browser.
@@ -44,7 +31,6 @@ Below is an example of the required structure:
 |          | Sunday      | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      | Saturday    |
 |----------|------------|------------|------------|------------|------------|------------|------------|
 | **Date** | 26th Jan   | 27th Jan   | 28th Jan   | 29th Jan   | 30th Jan   | 31st Jan   | 1st Feb    |
-| **Shift** | **Employee Name** | **Employee Name** | **Employee Name** | **Employee Name** | **Employee Name** | **Employee Name** | **Employee Name** |
 | 9:00-17:00  | Alice       | Bob        | Charlie    | David      | Emma       | Finn       | Grace      |
 | 10:00-15:00 | Henry       | Isla       | Jack       | Karen      | Liam       | Mia        | Noah       |
 | 10:30-15:30 | Olivia      | Peter      | Quinn      | Rachel     | Sam        | Tina       | Victor     |
@@ -122,17 +108,13 @@ This project is deployed on **Vercel**. Below is the relevant `vercel.json` conf
   }
 }
 ```
-To deploy manually:
-1. Install Vercel CLI:
-   ```sh
-   npm install -g vercel
-   ```
-2. Deploy the project:
-   ```sh
-   vercel
-   ```
 
 ## Troubleshooting
 - **Timeout issues**: Ensure `maxDuration` is set appropriately in `vercel.json`.
 - **File upload errors**: Verify that your Excel file follows the expected format.
 - **Calendar import issues**: Make sure your calendar app supports `.ics` files.
+
+## Future Features
+- **🔹 More Flexible Parsing** – Support for different table structures, date formats, and column arrangements.
+- **🔹 Direct Calendar Integration** – Option to sync shifts directly to Google Calendar or Outlook.
+- **🔹 Web API Support** – Expose an API endpoint for programmatic access.
