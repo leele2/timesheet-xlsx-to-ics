@@ -25,19 +25,23 @@ def fix_title(title):
     return fixed_title
 
 def read_xls(xls_path):
-    # Read the Excel file into a dictionary of DataFrames, where the key is the tab name
-    xls = pd.ExcelFile(xls_path)
-    
-    # Read visible sheets
-    data_frames = {}
-    for sheet in xls.book.worksheets:
-        if sheet.sheet_state == "visible":
-            print(f"sheet:{sheet.title} is {sheet.sheet_state}")
-            try:
-                data_frames[fix_title(sheet.title)] = pd.read_excel(xls_path, sheet_name=sheet.title, header=None, index_col=None)
-                print(f"Sheet saved as data frame with title: {fix_title(sheet.title)}")
-            except:
-                print("Title was not of correct format, not saving")
+    # Open the Excel file once
+    with pd.ExcelFile(xls_path) as xls:
+        data_frames = {}
+        
+        # Loop through only visible sheets
+        for sheet in xls.sheet_names:
+            sheet_obj = xls.book[sheet]
+            if sheet_obj.sheet_state == "visible":
+                #print(f"sheet:{sheet_obj.title} is {sheet_obj.sheet_state}")
+                
+                try:
+                    # Directly load the DataFrame for visible sheets
+                    data_frames[fix_title(sheet_obj.title)] = pd.read_excel(xls, sheet_name=sheet, header=None, index_col=None)
+                    #print(f"Sheet saved as data frame with title: {fix_title(sheet_obj.title)}")
+                except Exception as e:
+                    print(f"Error reading sheet {sheet_obj.title}: {e}")
+                    
     return data_frames
 
 def find_sunday_position(df):
