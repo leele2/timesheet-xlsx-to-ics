@@ -56,10 +56,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static files (CSS, JavaScript, images)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#static-url
-if DEBUG:
-    STATIC_URL = '/static/'  # Development URL for static files
-else:
-    STATIC_URL = '/public/'  # Production URL for static files
+STATIC_URL = '/static/'  # Development URL for static files
 
 # Add your local static file directories here
 STATICFILES_DIRS = [
@@ -68,7 +65,7 @@ STATICFILES_DIRS = [
 
 # Directory where static files will be stored after running collectstatic
 # (Typically outside your project directory for better organization and security)
-STATIC_ROOT = BASE_DIR / 'public'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Optional: Use manifest storage for cache busting (adding hash to filenames)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"

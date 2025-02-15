@@ -1,5 +1,5 @@
 {
-  "outputDirectory": "public/",
+  "outputDirectory": "static/",
   "buildCommand": "python3 manage.py collectstatic --noinput",
   "functions": {
     "api/wsgi.py": {
