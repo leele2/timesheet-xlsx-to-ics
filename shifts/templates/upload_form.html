@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Upload Excel File</title>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Shift Calendar</h1>
+            <p>Upload an Excel file containing your work shifts and generate an ICS calendar file.</p>
+            <p><a href="https://github.com/leele2/timesheet-xlsx-to-ics" target="_blank">Learn More</a></p>
+            <h2>Upload Your File</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <label for="name_to_search">Name:</label>
+                <input type="text" name="name_to_search" id="name_to_search" required>
+                <input type="file" name="excel_file" accept=".xlsx" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </body>
+</html>

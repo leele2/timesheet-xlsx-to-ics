@@ -52,70 +52,49 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'api.urls'
 
+WSGI_APPLICATION = 'api.wsgi.app'
+
+DATABASES = {}  # No database
+
+# Internationalization
+# https://docs.djangoproject.com/en/4.1/topics/i18n/
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Static files (CSS, JavaScript, images)
+# https://docs.djangoproject.com/en/5.1/ref/settings/#static-url
+STATIC_URL = '/static/'
+
+# Directory where static files will be collected when you run `collectstatic`
+# Add your local static file directories here
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # This allows Django to look for static files in the 'static' directory
+]
+
+# Directory where static files will be stored after running collectstatic
+# (Typically outside your project directory for better organization and security)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Optional: Use manifest storage for cache busting (adding hash to filenames)
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Add your templates directory here
+        'APP_DIRS': True,  # This tells Django to also look in each app's "templates" folder
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
-
-WSGI_APPLICATION = 'api.wsgi.app'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# Note: Django modules for using databases are not support in serverless
-# environments like Vercel. You can use a database over HTTP, hosted elsewhere.
-
-DATABASES = {}
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
