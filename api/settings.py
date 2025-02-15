@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+from os import getenv
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,9 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from .env
 load_dotenv(BASE_DIR / '.env')
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+SECRET_KEY = getenv('DJANGO_SECRET_KEY')
+ALLOWED_HOSTS = getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
+DEBUG = getenv('DEBUG', 'False') == 'True'
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -76,7 +76,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Add your templates directory here
+        'DIRS': [BASE_DIR / 'templates'],  # Add your templates directory here
         'APP_DIRS': True,  # This tells Django to also look in each app's "templates" folder
         'OPTIONS': {
             'context_processors': [
