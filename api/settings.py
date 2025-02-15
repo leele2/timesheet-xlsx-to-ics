@@ -65,7 +65,7 @@ STATICFILES_DIRS = [
 
 # Directory where static files will be stored after running collectstatic
 # (Typically outside your project directory for better organization and security)
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'public'
 
 # Optional: Use manifest storage for cache busting (adding hash to filenames)
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
