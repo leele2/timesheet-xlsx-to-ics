@@ -1,16 +1,27 @@
+from django.http import HttpResponse
+from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt  # CSRF Exempt decorator
 import io
 import pytz
 from datetime import datetime, timedelta
-from django.http import HttpResponse
-from django.middleware.csrf import get_token
 from .utils import read_xls, find_shifts
 from ics import Calendar, Event
 
+# Exempt CSRF protection for this view
+@csrf_exempt
+@cache_page(60 * 60 * 24 * 365)  # Cache the page for 1 year
 def upload_file(request):
+    # Define a file size limit (e.g., 5MB)
+    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
     # If the form is submitted
-    if request.method == 'POST' and request.FILES['excel_file']:
+    if request.method == 'POST' and request.FILES.get('excel_file'):
         uploaded_file = request.FILES['excel_file']
-        
+
+        # Check the file size
+        if uploaded_file.size > MAX_FILE_SIZE:
+            return HttpResponse("File size exceeds the allowed limit of 5MB.", status=400)
+
         # Read the file content into memory
         file_content = uploaded_file.read()  # This reads the file content into memory
         file_stream = io.BytesIO(file_content)  # Create an in-memory byte stream
@@ -50,10 +61,6 @@ def upload_file(request):
         return response
 
     # If no file is uploaded, return an inline HTML response
-    
-    # Get CSRF token
-    csrf_token = get_token(request)
-
     html = f'''
 <!DOCTYPE html>
 <html lang="en">
@@ -123,7 +130,6 @@ def upload_file(request):
         <p><a href="https://github.com/leele2/timesheet-xlsx-to-ics" target="_blank">Learn More</a></p>
         <h2>Upload Your File</h2>
         <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
             <label for="name_to_search">Name:</label>
             <input type="text" name="name_to_search" id="name_to_search" required>
             <input type="file" name="excel_file" accept=".xlsx" required>
