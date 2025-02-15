@@ -7,7 +7,7 @@
   ],
   "functions": {
     "api/wsgi.py": {
-      "maxDuration": 60
+      "maxDuration": 15
     }
   }
 }
