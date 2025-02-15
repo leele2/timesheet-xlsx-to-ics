@@ -1,5 +1,13 @@
 {
-  "buildCommand": "python3 manage.py collectstatic --noinput && vercel-build",
+  "builds": [
+    {
+      "src": "api/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.9"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
