@@ -56,11 +56,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static files (CSS, JavaScript, images)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#static-url
-STATIC_URL = '/static/'  # Development URL for static files
+if DEBUG:
+    STATIC_URL = '/dev_static/'  # Development URL for static files
+else:
+    STATIC_URL = '/static/'  # Production URL for static files
 
 # Add your local static file directories here
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # This allows Django to look for static files in the 'static' directory
+    BASE_DIR / "dev_static",  # This allows Django to look for static files in the 'static' directory
 ]
 
 # Directory where static files will be stored after running collectstatic
