@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -55,9 +56,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static files (CSS, JavaScript, images)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#static-url
-STATIC_URL = '/static/'
+if DEBUG:
+    STATIC_URL = '/static/'  # Development URL for static files
+else:
+    STATIC_URL = '/public/'  # Production URL for static files
 
-# Directory where static files will be collected when you run `collectstatic`
 # Add your local static file directories here
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # This allows Django to look for static files in the 'static' directory
@@ -68,7 +71,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / 'public'
 
 # Optional: Use manifest storage for cache busting (adding hash to filenames)
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 TEMPLATES = [
     {
