@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
-from .utils import read_xls, find_shifts
+from .utils import generate_uid, read_xls, find_shifts
 from ics import Calendar, Event
 import io
 import pytz
@@ -37,10 +37,13 @@ def upload_file(request):
             localized_start = local_time_zone.localize(start_dt)
             localized_end = localized_start + timedelta(hours=shift["Duration"])
 
+            event_uid = generate_uid(shift_date, name_to_search.lower())
+
             event = Event()
             event.name = "Work Shift"
             event.begin = localized_start
             event.end = localized_end
+            event.uid = event_uid
             cal.events.add(event)
 
         response = HttpResponse(cal, content_type='text/calendar')

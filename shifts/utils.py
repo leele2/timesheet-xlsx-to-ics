@@ -1,6 +1,14 @@
 import pandas as pd
 import re
 from datetime import datetime
+import hashlib
+import uuid
+
+def generate_uid(employee_name, shift_date):
+    """Generate a UID based on employee name and date (not ideal for multiple shifts per day)."""
+    unique_string = f"{employee_name}{shift_date}"
+    hash_val = hashlib.md5(unique_string.encode()).hexdigest()
+    return str(uuid.UUID(hash_val[:32]))  # Convert first 32 hex chars to UUID format
 
 def format_part(part):
     # For parts greater than or equal to 10, split into two numbers
