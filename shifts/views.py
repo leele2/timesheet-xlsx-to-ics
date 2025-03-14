@@ -14,7 +14,7 @@ def upload_file(request):
     # Handle the POST request
     if request.method == 'POST' and request.FILES.get('excel_file'):
         uploaded_file = request.FILES['excel_file']
-        MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+        MAX_FILE_SIZE = 20 * 1024 * 1024  # 5MB
 
         # Check file size
         if uploaded_file.size > MAX_FILE_SIZE:
