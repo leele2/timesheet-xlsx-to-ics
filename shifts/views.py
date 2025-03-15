@@ -53,18 +53,26 @@ def upload_file(request):
             return HttpResponse("File size exceeds the allowed limit of 5MB.", status=400)
 
         # Upload file to Vercel Blob Storage
+        # Prepare the request headers and options
+        options = {
+            "token": VERCEL_BLOB_TOKEN,
+            "addRandomSuffix": "true",
+            "cacheControlMaxAge": "31536000",
+        }
         headers = {
             "Authorization": f"Bearer {VERCEL_BLOB_TOKEN}",
             "Content-Type": "application/octet-stream",
         }
-        upload_response = requests.post(
-            f"{VERCEL_BLOB_URL}/put",
+        upload_response = requests.put(
+            f"{VERCEL_BLOB_URL}/{uploaded_file.name}",
             headers=headers,
-            files={"file": (uploaded_file.name, uploaded_file.read())},
+            data=uploaded_file.read(),
+            params=options
         )
 
         if upload_response.status_code != 200:
-            return JsonResponse({"error": "Failed to upload file"}, status=500)
+            # return JsonResponse({"error": "Failed to upload file"}, status=500)
+            return JsonResponse(upload_response.json(), status=upload_response.status_code)
 
         blob_data = upload_response.json()
         file_url = blob_data.get("url")
