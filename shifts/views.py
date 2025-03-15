@@ -108,14 +108,14 @@ def upload_file(request):
                 event.uid = event_uid
                 cal.events.add(event)
 
-            delete_blob(blob_data["blob"]["key"])
+            delete_blob(blob_data.get("url"))
 
             response = HttpResponse(cal, content_type='text/calendar')
             response['Content-Disposition'] = f'attachment; filename=shifts.ics'
             return response
         
         except Exception as e:
-            delete_blob(blob_data["blob"]["key"])  # Ensure the file is deleted even if an error occurs
+            delete_blob(blob_data.get("url"))
             return JsonResponse({"error": str(e)}, status=500)
 
     # Render the template if it's a GET request
