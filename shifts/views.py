@@ -89,6 +89,7 @@ def upload_file(request):
 
             if not shifts:
                 raise Exception("No Shifts were detected")
+            
             # Create the ICS file
             cal = Calendar()
             local_time_zone = pytz.timezone("Australia/Sydney")
