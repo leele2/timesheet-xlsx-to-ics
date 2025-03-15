@@ -31,7 +31,6 @@ def delete_blob(file_url):
 
         # Check if the deletion was successful
         if delete_response.status_code == 200:
-            logger1.info(f"File Deleted")
             return JsonResponse({"message": "File successfully deleted."}, status=200)
         else:
             # If deletion fails, return the response error
