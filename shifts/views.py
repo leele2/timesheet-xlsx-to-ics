@@ -13,10 +13,33 @@ from datetime import datetime, timedelta
 VERCEL_BLOB_URL = "https://blob.vercel-storage.com/"
 VERCEL_BLOB_TOKEN = getenv('BLOB_READ_WRITE_TOKEN')
 
-def delete_blob(blob_key):
-    """Deletes a file from Vercel Blob Storage"""
-    headers = {"Authorization": f"Bearer {VERCEL_BLOB_TOKEN}"}
-    requests.delete(f"{VERCEL_BLOB_URL}/{blob_key}", headers=headers)
+def delete_blob(file_url):
+    """Deletes a file from Vercel Blob Storage using its URL."""
+    
+    try:
+        # Prepare the headers for the DELETE request
+        headers = {
+            "Authorization": f"Bearer {VERCEL_BLOB_TOKEN}",
+            "x-api-version": "7",
+        }
+        # Send DELETE request to Vercel Blob Storage delete endpoint
+        delete_response = requests.post(
+            f"{VERCEL_BLOB_URL}/delete",
+            headers=headers,
+            json={"urls": [file_url] if isinstance(file_url, str) else file_url},
+        )
+
+        # Check if the deletion was successful
+        if delete_response.status_code == 200:
+            logger1.info(f"File Deleted")
+            return JsonResponse({"message": "File successfully deleted."}, status=200)
+        else:
+            # If deletion fails, return the response error
+            print(delete_response.json())
+            return JsonResponse(delete_response.json(), status=delete_response.status_code)
+
+    except Exception as e:
+        return JsonResponse({"error": f"Error deleting file: {str(e)}"}, status=500)
 
 @csrf_exempt
 @cache_page(60 * 60 * 24 * 365)  # Cache the page for 1 year
