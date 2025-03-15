@@ -10,8 +10,7 @@ import requests
 import pytz
 from datetime import datetime, timedelta
 
-
-VERCEL_BLOB_URL = "https://api.vercel.com/v2/blobs"
+VERCEL_BLOB_URL = "https://blob.vercel-storage.com/"
 VERCEL_BLOB_TOKEN = getenv('BLOB_READ_WRITE_TOKEN')
 
 def delete_blob(blob_key):
