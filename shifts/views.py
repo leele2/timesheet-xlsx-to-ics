@@ -87,6 +87,8 @@ def upload_file(request):
             name_to_search = request.POST.get('name_to_search')
             shifts = find_shifts(data_frames, name_to_search)
 
+            if not shifts:
+                raise Exception("No Shifts were detected")
             # Create the ICS file
             cal = Calendar()
             local_time_zone = pytz.timezone("Australia/Sydney")
