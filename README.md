@@ -1,5 +1,10 @@
 # Excel to ICS Converter [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://timesheet-xlsx-to-ics.vercel.app/)
 
+> ![Deprecated](https://img.shields.io/badge/status-deprecated-red)  
+> After significant effort attempting to get `client_upload` working with Vercel Blob on Django (to bypass Vercel’s 5MB file limit), I ultimately decided to reimplement the project using **Next.js** for the frontend and **FastAPI** for the backend.  
+> 🚀 You can find the latest version here: [leele2/ts_xlxs_to_ics](https://github.com/leele2/ts_xlxs_to_ics)
+
+
 ## Overview
 This project provides a web-based tool for uploading an Excel file containing work shifts and converting it into an ICS calendar file. Users can then import the generated ICS file into their preferred calendar applications.
 
@@ -95,17 +100,19 @@ To ensure proper processing, the following data formats must be used:
 This project is deployed on **Vercel**. Below is the relevant `vercel.json` configuration:
 ```json
 {
+  "outputDirectory": "static/",
+  "buildCommand": "python3 manage.py collectstatic --noinput",
+  "functions": {
+    "api/wsgi.py": {
+      "maxDuration": 15
+    }
+  },
   "routes": [
     {
       "src": "/(.*)",
       "dest": "api/wsgi.py"
     }
-  ],
-  "functions": {
-    "api/wsgi.py": {
-      "maxDuration": 60
-    }
-  }
+  ]
 }
 ```
 
